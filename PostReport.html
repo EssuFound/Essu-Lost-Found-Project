@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESSU Lost & Found System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+ 
+  <style>
+    :root {
+      --essu-green: #006400;
+      --essu-light-green: #228B22;
+      --essu-gold: #FFD700;
+      --text-dark: #333;
+      --white: #ffffff;
+      --lost-red: #d9534f;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, var(--essu-light-green), var(--essu-green));
+      margin: 0;
+      padding: 0;
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: var(--essu-green);
+      border-bottom: 4px solid var(--essu-gold);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--essu-gold);
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 40px;
+      width: auto;
+      background: transparent;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: var(--essu-light-green);
+      color: var(--essu-gold);
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: var(--white);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-top: 8px solid var(--essu-gold);
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      color: var(--essu-green);
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .report-selection {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      justify-content: center;
+    }
+
+    .selection-btn {
+      padding: 10px 30px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .active-lost { border-color: var(--lost-red); color: var(--lost-red); background: rgba(217, 83, 79, 0.05); }
+    .active-found { border-color: var(--essu-green); color: var(--essu-green); background: rgba(0, 100, 0, 0.05); }
+
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--essu-green); }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+    }
+
+    input:focus, textarea:focus { border-color: var(--essu-gold); }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--essu-green);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .btn-submit:hover { background: var(--essu-light-green); }
+
+    @media (max-width: 992px) {
+      .menu-toggle { display: block; }
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 50%;
+        background-color: var(--essu-green);
+        padding: 10px 0;
+        border-bottom: 4px solid var(--essu-gold);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+      nav ul.show { display: flex; }
+      nav ul li { width: 100%; text-align: center; }
+      nav ul li a { display: block; padding: 10px; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .logo span { font-size: 22px; }
+      .container { padding: 15px; }
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--essu-gold);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+    <header>
+    <div class="nav-container">
+      <div class="logo">
+        <img src="logologo.png" alt="ESSU Logo">
+        <span>ESSU LOST & FOUND</span>
+      </div>
+     
+      <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <ul id="navMenu">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Browse.html">Browse</a></li>
+          <li><a href="PostReport.html" class="active">Reporting Items</a></li>
+          <li><a href="Contact.html">Contact</a></li>   
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="login.html">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1 id="titleDisplay">REPORT LOST ITEM</h1>
+    <p class="subtitle">Please fill in the details below to submit a report.</p>
+
+    <div class="report-selection">
+      <div id="lostBtn" class="selection-btn active-lost" onclick="setMode('lost')">LOST ITEM</div>
+      <div id="foundBtn" class="selection-btn" onclick="setMode('found')">FOUND ITEM</div>
+    </div>
+
+    <form id="reportForm">
+      <div class="form-group">
+        <label>Item Name</label>
+        <input type="text" id="itemName" placeholder="e.g., Wallet, ID, Keys" required>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="itemDesc" rows="3" placeholder="Describe color, brand, or unique markings..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label id="locationLabel">Location (Where it was lost)</label>
+        <input type="text" id="itemLoc" placeholder="e.g., CBMA Building, Library" required>
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="itemDate" required>
+      </div>
+<div class="form-group">
+  <label for="itemCat">Item Category</label>
+  <select id="itemCat" required>
+    <option value="" disabled selected>Select category...</option>
+    <option value="electronics">🔌 Electronics</option>
+    <option value="documents">📄 IDs / Documents</option>
+    <option value="wallet_cash">💰 Wallet / Cash</option>
+    <option value="cellphone">📱 Cell Phone</option>
+    <option value="notebook">📓 Notebook</option>
+     <option value="laptop">💻 Laptop</option>
+      <option value="charger">🔋 Charger</option>
+    <option value="umbrella">☂️ Umbrella</option>
+    <option value="others">📦 Others</option>
+  </select>
+</div>      <div class="form-group">
+        <label id="imageLabel">Upload Image (Optional)</label>
+        <input type="file" id="itemImage" accept="image/*">
+      </div>
+
+      <button type="submit" class="btn-submit">SUBMIT REPORT</button>
+    </form>
+  </div>
+ 
+  <footer>© 2026 ESSU Lost & Found System</footer>
+<script>
+  // 1. AUTHENTICATION GUARD (Dapat laging nasa taas)
+  (function() {
+    if (!localStorage.getItem('loggedInUser')) {
+      window.location.replace('login.html');
+    }
+  })();
+
+  let currentMode = 'lost'; // Default mode
+
+  function toggleMenu() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    const title = document.getElementById('titleDisplay');
+    const label = document.getElementById('locationLabel');
+    const lostBtn = document.getElementById('lostBtn');
+    const foundBtn = document.getElementById('foundBtn');
+
+    if(mode === 'lost') {
+      title.innerText = "REPORT LOST ITEM";
+      label.innerText = "Location (Where it was lost)";
+      lostBtn.classList.add('active-lost');
+      foundBtn.classList.remove('active-found');
+    } else {
+      title.innerText = "REPORT FOUND ITEM";
+      label.innerText = "Location (Where it was found)";
+      foundBtn.classList.add('active-found');
+      lostBtn.classList.remove('active-lost');
+    }
+  }
+
+  document.getElementById('reportForm').onsubmit = function(e) {
+    e.preventDefault();
+   
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.innerText = "Submitting...";
+    submitBtn.disabled = true;
+
+    const file = document.getElementById('itemImage').files[0];
+    const currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+    const finalizeSubmission = (imgData) => {
+      const newItem = {
+        name: document.getElementById('itemName').value,
+        desc: document.getElementById('itemDesc').value,
+        loc: document.getElementById('itemLoc').value,
+        date: document.getElementById('itemDate').value,
+        cat: document.getElementById('itemCat').value,
+        status: currentMode,
+        image: imgData,
+        approvalStatus: 'pending',
+        submittedBy: currentUser ? currentUser.email : 'Unknown',
+        submittedAt: new Date().toLocaleString(),
+        claims: [] // Para sa Match system mo
+      };
+
+      try {
+        let reports = JSON.parse(localStorage.getItem('reportedItems')) || [];
+        reports.unshift(newItem);
+        localStorage.setItem('reportedItems', JSON.stringify(reports));
+       
+        // Mabilis na redirect pagkatapos ma-save
+        window.location.href = 'Browse.html';
+      } catch (error) {
+        alert("Memory Full! Burahin ang ilang lumang data sa Dashboard.");
+        submitBtn.disabled = false;
+        submitBtn.innerText = "SUBMIT REPORT";
+      }
+    };
+
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          // MABILIS NA COMPRESSION: Ni-resize sa 300px width para maliit ang file size
+          const canvas = document.createElement('canvas');
+          const width = 300;
+          const scale = width / img.width;
+          canvas.width = width;
+          canvas.height = img.height * scale;
+         
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+         
+          // 0.4 quality para mabilis ma-save sa localStorage
+          finalizeSubmission(canvas.toDataURL('image/jpeg', 0.4));
+        };
+      };
+    } else {
+      finalizeSubmission(null);
+    }
+  };
+</script>
+
+
+</body>
+</html>
