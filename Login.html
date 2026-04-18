@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESSU Lost & Found System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --essu-green: #006400;
+            --essu-gold: #FFD700;
+            --bg-color: #228B22;
+            --card-white: #ffffff;
+            --error-red: #d32f2f;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+             100, 0, 0.1) 25%, transparent 25%), 
+                              linear-gradient(225deg, rgba(0, 100, 0, 0.1) 25%, transparent 25%);
+            background-size: 40px 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-white);
+            width: 100%;
+            max-width: 420px;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-bottom: 8px solid var(--essu-gold);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .logo-circle img { width: 100%; height: auto; object-fit: contain; }
+
+        h1 { font-family: 'Cinzel', serif; color: var(--essu-green); font-size: 1.8rem; margin: 0; }
+
+        .subtitle { color: #555; font-size: 0.7rem; margin-bottom: 25px; text-transform: uppercase; font-weight: 600; }
+
+        .form-box h2 { font-family: 'Cinzel', serif; font-size: 1.3rem; margin-bottom: 20px; }
+
+        .input-group { text-align: left; margin-bottom: 18px; position: relative; }
+
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+
+        .input-group i.input-icon { position: absolute; left: 15px; top: 40px; color: #888; }
+
+        .input-group input {
+            width: 100%; padding: 12px 15px 12px 42px;
+            border: 1.5px solid #ddd; border-radius: 10px;
+            box-sizing: border-box; font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus { border-color: var(--essu-green); outline: none; box-shadow: 0 0 10px rgba(0,100,0,0.1); }
+
+        .toggle-password { position: absolute; right: 15px; top: 40px; cursor: pointer; color: #888; }
+
+        .helper-links { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.8rem; }
+
+        .helper-links a { color: var(--essu-green); text-decoration: none; font-weight: 500; }
+
+        .btn-main {
+            width: 100%; padding: 14px; background: var(--essu-green); color: white;
+            border: none; border-radius: 10px; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+
+        .btn-main:hover { background: #004d00; transform: translateY(-2px); }
+
+        .error-message {
+            color: var(--error-red); font-size: 0.75rem; margin-bottom: 15px;
+            display: none; font-weight: 600; background: #ffebee; padding: 8px; border-radius: 5px;
+        }
+
+        .toggle-text { margin-top: 25px; font-size: 0.9rem; color: #555; }
+        .toggle-text a { color: var(--essu-green); text-decoration: none; font-weight: 600; }
+
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-circle">
+            <img src="logo.png" alt="ESSU Logo"> 
+        </div>
+
+        <h1>Lost & Found</h1>
+        <p class="subtitle">Management System for University Campuses</p>
+
+        <div id="login-section" class="form-box fade-in">
+            <h2>Welcome Back!</h2>
+            <div id="login-error" class="error-message"></div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="loginEmail" placeholder="student@essu.edu.ph" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    <i class="fa-solid fa-eye-slash toggle-password" onclick="togglePass('loginPassword', this)"></i>
+                </div>
+                
+                <div class="helper-links">
+                    <label style="cursor:pointer"><input type="checkbox"> Remember me</label>
+                    <a href="javascript:void(0)" onclick="handleForgotPassword()">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-main">Login</button>
+            </form>
+            <p class="toggle-text">
+                Don't have an account? <a href="javascript:void(0)" onclick="switchForm('signup')">Sign Up</a>
+            </p>
+        </div>
+
+        <div id="signup-section" class="form-box fade-in" style="display: none;">
+            <h2>Create Your Account</h2>
+            <div id="signup-error" class="error-message"></div>
+
+            <form id="signupForm">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <input type="text" id="signupName" placeholder="Juan Dela Cruz" required>
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="signupEmail" placeholder="name@essu.edu.ph" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" id="signupPassword" placeholder="Min. 8 characters" required>
+                    <i class="fa-solid fa-eye-slash toggle-password" onclick="togglePass('signupPassword', this)"></i>
+                </div>
+                <button type="submit" class="btn-main">Register</button>
+            </form>
+            <p class="toggle-text">
+                Already registered? <a href="javascript:void(0)" onclick="switchForm('login')">Login here</a>
+            </p>
+        </div>
+    </div>
+
+<script>
+    // 1. Password Visibility Toggle
+    function togglePass(inputId, icon) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.replace("fa-eye-slash", "fa-eye");
+        } else {
+            input.type = "password";
+            icon.classList.replace("fa-eye", "fa-eye-slash");
+        }
+    }
+
+    // 2. Switch Form (Login/Signup)
+    function switchForm(form) {
+        document.getElementById('login-section').style.display = form === 'login' ? 'block' : 'none';
+        document.getElementById('signup-section').style.display = form === 'signup' ? 'block' : 'none';
+        document.getElementById('login-error').style.display = 'none';
+        document.getElementById('signup-error').style.display = 'none';
+    }
+
+    // 3. Forgot Password Logic
+    function handleForgotPassword() {
+        const emailInput = prompt("Enter your registered ESSU email:");
+        if (!emailInput) return;
+
+        const users = JSON.parse(localStorage.getItem('essu_users')) || [];
+        const foundUser = users.find(u => u.email.toLowerCase() === emailInput.toLowerCase());
+
+        if (foundUser) {
+            alert("Account Found! Your password is: " + foundUser.password);
+        } else if (emailInput === "essufound@gmail.com") {
+            alert("Admin Password is: @essu123");
+        } else {
+            alert("Email not found in our records.");
+        }
+    }
+
+    // 4. Signup Logic (Save to LocalStorage)
+    document.getElementById('signupForm').onsubmit = function(e) {
+        e.preventDefault();
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value.toLowerCase();
+        const password = document.getElementById('signupPassword').value;
+        const errorBox = document.getElementById('signup-error');
+
+        if (!email.endsWith('@essu.edu.ph')) {
+            errorBox.innerText = "Use official @essu.edu.ph email.";
+            errorBox.style.display = 'block';
+            return;
+        }
+        if (password.length < 8) {
+            errorBox.innerText = "Password must be at least 8 characters.";
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        let users = JSON.parse(localStorage.getItem('essu_users')) || [];
+        if (users.some(u => u.email === email)) {
+            errorBox.innerText = "Email already registered!";
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        users.push({ name, email, password });
+        localStorage.setItem('essu_users', JSON.stringify(users));
+        alert("Account Created! You can now login.");
+        switchForm('login');
+    };
+
+    // 5. Login Logic (Match Password)
+    document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.toLowerCase();
+        const password = document.getElementById('loginPassword').value;
+        const errorBox = document.getElementById('login-error');
+
+        // Admin hardcoded access
+        if (email === "essufound@gmail.com" && password === "@essu123") {
+            localStorage.setItem('loggedInUser', JSON.stringify({email, role:'admin'}));
+            window.location.href = 'Home.html';
+            return;
+        }
+
+        // Match from LocalStorage
+        const users = JSON.parse(localStorage.getItem('essu_users')) || [];
+        const user = users.find(u => u.email === email && u.password === password);
+
+        if (user) {
+            localStorage.setItem('loggedInUser', JSON.stringify({email: user.email, name: user.name, role:'user'}));
+            window.location.href = 'Home.html';
+        } else {
+            errorBox.innerText = "Incorrect email or password.";
+            errorBox.style.display = 'block';
+        }
+    };
+</script>
+</body>
+</html>
