@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESSU Lost & Found System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --essu-green: #006400;
+      --essu-light-green: #228B22;
+      --essu-gold: #FFD700;
+      --text-dark: #333;
+      --white: #ffffff;
+      --lost-red: #d9534f;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, var(--essu-light-green), var(--essu-green));
+      margin: 0;
+      padding: 0;
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ===== NAVBAR (Original Design) ===== */
+    header {
+      background-color: var(--essu-green);
+      border-bottom: 4px solid var(--essu-gold);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--essu-gold);
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 40px;
+      width: auto;
+      background: transparent;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: var(--essu-light-green);
+      color: var(--essu-gold);
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* ===== CONTENT (Dashboard Design) ===== */
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: var(--white);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-top: 8px solid var(--essu-gold);
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      color: var(--essu-green);
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .stat-card {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid #eee;
+    }
+
+    .stat-card h2 { margin: 0; font-size: 28px; color: var(--essu-green); }
+    .stat-card p { margin: 5px 0 0; font-size: 12px; color: #777; font-weight: 600; }
+
+    .chart-container {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      display: flex;
+      justify-content: center;
+      height: 300px;
+    }
+
+    /* Dito yung Table para kay Admin */
+    .admin-user-list {
+      margin-top: 30px;
+      display: none; /* Default hidden */
+      border-top: 2px solid #f0f0f0;
+      padding-top: 20px;
+    }
+
+    .admin-user-list h3 {
+      font-family: 'Cinzel', serif;
+      color: var(--essu-green);
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      background-color: var(--essu-green);
+      color: white;
+      padding: 10px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .pass-blur {
+      filter: blur(4px);
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .pass-blur:hover { filter: blur(0); }
+
+/* ===== RESPONSIVENESS ===== */
+    @media (max-width: 992px) { 
+      .menu-toggle { display: block; }
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 50%;
+        background-color: var(--essu-green);
+        padding: 10px 0;
+        border-bottom: 4px solid var(--essu-gold);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+
+      nav ul.show { display: flex; }
+      nav ul li { width: 100%; text-align: center; }
+      nav ul li a { display: block; padding: 10px; }
+      .dashboard-content { grid-template-columns: 1fr; }
+    } 
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .container { padding: 15px; }
+    }    
+    
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--essu-gold);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+    <header>
+    <div class="nav-container">
+        <div class="logo">
+            <img src="logologo.png" alt="ESSU Logo" style="height: 40px; width: auto;">
+     <span>ESSU LOST & FOUND</span>
+      </div>
+      
+      <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <ul id="navMenu">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Browse.html">Browse</a></li>
+         <li><a href="PostReport.html">Reporting Items</a></li>
+          <li><a href="Contact.html">Contact </a></li>    
+          <li><a href="dashboard.html" class="active">Dashboard</a></li>
+          <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+ <div class="container">
+    <h1 id="headerTitle">USER DASHBOARD</h1>
+    <p class="subtitle">Overview of your reported items and system activity.</p>
+
+    <div class="dashboard-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h2 id="totalReports">0</h2>
+          <p>Total Reports</p>
+        </div>
+        <div class="stat-card">
+          <h2 id="itemsLost" style="color: var(--lost-red);">0</h2>
+          <p>Items Lost</p>
+        </div>
+        <div class="stat-card">
+          <h2 id="itemsFound">0</h2>
+          <p>Items Found</p>
+        </div>
+        <div class="stat-card">
+          <h2 id="activeMatches" style="color: var(--essu-gold);">0</h2>
+          <p>Registered Users</p> </div>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="reportsChart"></canvas>
+      </div>
+    </div>
+
+    <div id="adminUserArea" class="admin-user-list">
+        <h3>Registered User Accounts</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+  <footer>© 2026 ESSU Lost & Found System</footer>
+<script>
+const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+// Redirect if not logged in
+(function() {
+    if (!loggedInUser) {
+        window.location.replace('login.html'); 
+    }
+})();
+
+// Logout
+function logout() {
+    localStorage.removeItem('loggedInUser');
+    window.location.replace('login.html');
+}
+
+// Update Dashboard
+function updateDashboard() {
+    const items = JSON.parse(localStorage.getItem('reportedItems')) || [];
+    const users = JSON.parse(localStorage.getItem('essu_users')) || [];
+    
+    const total = items.length;
+    const lost = items.filter(i => i.status === 'lost').length;
+    const found = items.filter(i => i.status === 'found').length;
+    const regUsers = users.length;
+
+    // Update UI Stats
+    document.getElementById('totalReports').innerText = total;
+    document.getElementById('itemsLost').innerText = lost;
+    document.getElementById('itemsFound').innerText = found;
+    document.getElementById('activeMatches').innerText = regUsers;
+
+    // Nilagyan ng kulay ang mga text numbers gaya ng request mo
+    document.getElementById('totalReports').style.color = "#007bff"; // Blue
+    document.getElementById('activeMatches').style.color = "#FFD700"; // Yellow/Gold
+
+    // ADMIN ONLY VIEW
+    if (loggedInUser && loggedInUser.email === "essufound@gmail.com") {
+        document.getElementById('headerTitle').innerText = "ADMIN DASHBOARD";
+        document.getElementById('adminUserArea').style.display = "block";
+        
+        const tableBody = document.getElementById('userTableBody');
+        tableBody.innerHTML = users.map(u => `
+            <tr>
+                <td>${u.name || u.fullName || 'No Name'}</td>
+                <td>${u.email}</td>
+                <td><span class="pass-blur">${u.password}</span></td>
+            </tr>
+        `).join('');
+    }
+
+    // Ipinasa ang apat na data points sa chart
+    renderChart(lost, found, total, regUsers);
+}
+
+// Chart - FIXED Syntax and Colors
+function renderChart(l, f, t, r) {
+    const chartCanvas = document.getElementById('reportsChart');
+    if (!chartCanvas) return;
+
+    const ctx = chartCanvas.getContext('2d');
+
+    if (window.myChart) {
+        window.myChart.destroy();
+    }
+
+    window.myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            // Apat na labels para sa apat na data points
+            labels: ['Lost', 'Found', 'Total Reports', 'Registered Users'],
+            datasets: [{
+                data: [l, f, t, r],
+                // Red, Green, Blue, Yellow
+                backgroundColor: ['#d9534f', '#006400', '#007bff', '#FFD700'],
+                borderWidth: 1
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { position: 'bottom' } 
+            }
+        }
+    });
+}
+
+// On Load
+window.onload = function() {
+    updateDashboard();
+
+    const navLinks = document.querySelectorAll('nav ul li a');
+    navLinks.forEach(link => {
+        if (link.textContent.toLowerCase().includes('logout')) {
+            link.onclick = function(e) {
+                e.preventDefault();
+                logout();
+            };
+        }
+    });
+};
+
+// Mobile Menu Toggle
+function toggleMenu() {
+    const menu = document.getElementById('navMenu');
+    if (menu) menu.classList.toggle('show');
+}
+</script>
+
+</body>
+</html>
