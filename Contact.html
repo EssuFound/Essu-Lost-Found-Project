@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESSU Lost & Found System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --essu-green: #006400;
+      --essu-light-green: #228B22;
+      --essu-gold: #FFD700;
+      --text-dark: #333;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, var(--essu-light-green), var(--essu-green));
+      margin: 0;
+      padding: 0;
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ===== NAVBAR (ORIGINAL) ===== */
+    header {
+      background-color: var(--essu-green);
+      border-bottom: 4px solid var(--essu-gold);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--essu-gold);
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 50px;
+      width: auto;
+      background: transparent;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex; 
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: var(--essu-light-green);
+      color: var(--essu-gold);
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* ===== CONTENT (ORIGINAL WHITE BOX) ===== */
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: var(--white);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-top: 8px solid var(--essu-gold);
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      color: var(--essu-green);
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .contact-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .contact-card {
+      flex: 1;
+      min-width: 250px;
+      text-align: center;
+      padding: 20px;
+      background: #fdfdfd;
+      border: 1px solid #eee;
+      border-radius: 12px;
+    }
+
+    .contact-card i {
+      font-size: 30px;
+      color: var(--essu-green);
+      margin-bottom: 10px;
+    }
+
+    .btn-send {
+      display: block;
+      width: fit-content;
+      margin: 30px auto 0;
+      background-color: var(--essu-green);
+      color: var(--essu-gold);
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-send:hover {
+      background-color: var(--essu-light-green);
+    }
+
+    /* ===== MOBILE RESPONSIVENESS (ORIGINAL) ===== */
+    @media (max-width: 992px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 50%;
+        background-color: var(--essu-green);
+        padding: 10px 0;
+        border-bottom: 4px solid var(--essu-gold);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+
+      nav ul.show {
+        display: flex;
+      }
+
+      nav ul li {
+        width: 100%;
+        text-align: center;
+      }
+
+      nav ul li a {
+        display: block;
+        padding: 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .container { padding: 15px; }
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--essu-gold);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-container">
+    <div class="logo">
+      <img src="logologo.png" alt="ESSU Logo" style="height: 40px; width: auto;">
+      <span>ESSU LOST & FOUND</span>
+    </div>
+    <nav>
+      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+      <ul id="navMenu">
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Browse.html">Browse</a></li>
+        <li><a href="PostReport.html">Reporting Items</a></li>
+        <li><a href="Contact.html" class="active">Contact</a></li>    
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="javascript:void(0)" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <h1>Contact This Account</h1>
+  <div class="subtitle">Feel free to reach out for inquiries</div>
+
+  <div class="contact-container">
+    <div class="contact-card">
+      <i class="fas fa-envelope"></i>
+      <h3>Email</h3>
+      <p>essufound@gmail.com</p>
+    </div>
+
+    <div class="contact-card">
+      <i class="fas fa-map-marker-alt"></i>
+      <h3>Location</h3>
+      <p>ESSU Main Campus</p>
+    </div>
+
+    <div class="contact-card">
+      <i class="fas fa-phone-alt"></i>
+      <h3>Phone</h3>
+      <p>+63 09971471249</p>
+    </div>
+  
+  </div>
+
+  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=essufound@gmail.com&su=Inquiry&body=Good%20day,%20I%20would%20like%20to%20inquire%20about..."
+     target="_blank"
+     class="btn-send">
+     <i class="fas fa-paper-plane"></i> Send Message
+  </a>
+
+
+   
+</div>
+
+<footer>© 2026 ESSU Lost & Found System</footer>
+
+<script>
+    // 1. AUTHENTICATION GUARD
+    // Siguraduhin na 'loggedInUser' ang key na gamit mo (base sa previous pages mo)
+    (function() {
+        const user = localStorage.getItem('loggedInUser'); 
+        if (!user) {
+            // Gumamit ng replace para hindi na makapag-back ang user
+            window.location.replace("login.html");
+        }
+    })();
+
+    // 2. NAVIGATION FUNCTIONS
+    function toggleMenu() {
+        const menu = document.getElementById("navMenu");
+        if (menu) {
+            menu.classList.toggle("show");
+        }
+    }
+
+    function logout() {
+        // Linisin ang session data
+        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('currentUser'); // Para sigurado kung dalawa ang nagamit
+        window.location.replace("login.html");
+    }
+
+    // 3. CLOSE MENU ON OUTSIDE  src="CLICK" alt="">
+    window.onclick = function(event) {
+        // I-check kung ang click ay sa labas ng menu at ng toggle button
+        if (!event.target.matches('.menu-toggle')) {
+            const menu = document.getElementById("navMenu");
+            // Tiyaking may 'show' class bago ito alisin
+            if (menu && menu.classList.contains('show')) {
+                menu.classList.remove('show');
+            }
+        }
+    }
+</script>
+
+
+</body>
+</html>
