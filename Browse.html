@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESSU Lost & Found System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --essu-green: #006400;
+      --essu-light-green: #228B22;
+      --essu-gold: #FFD700;
+      --text-dark: #333;
+      --white: #ffffff;
+      --lost-red: #d9534f; /* Added for the tag color */
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, var(--essu-light-green), var(--essu-green));
+      margin: 0;
+      padding: 0;
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ===== NAVBAR ===== */
+    header {
+      background-color: var(--essu-green);
+      border-bottom: 4px solid var(--essu-gold);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Logo sa kaliwa, Nav sa kanan */
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--essu-gold);
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 860px;
+      width: auto;
+      background: transparent;
+    }
+
+    /* Desktop Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex; /* Horizontal sa Desktop */
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: var(--essu-light-green);
+      color: var(--essu-gold);
+    }
+
+    .menu-toggle {
+      display: none; /* Tago sa Desktop */
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* ===== CONTENT ===== */
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: var(--white);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-top: 8px solid var(--essu-gold);
+    }
+      
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      color: var(--essu-green);
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+    /* Search & Filter Bar */
+    .search-filter-wrapper {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .search-input {
+      flex: 2;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+    }
+
+    .filter-select {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      background: white;
+    }
+
+    /* Items Grid */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .item-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: 0.3s ease;
+    }
+
+    .item-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .item-image {
+      width: 100%;
+      height: 660px; /* Inayos ko lang to from 660px para magkasya sa screen */
+      background-color: #f8f8f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #aaa;
+      position: relative;
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .status-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .status-lost { background: var(--lost-red); }
+    .status-found { background: var(--essu-light-green); }
+
+    .item-info {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .item-info h3 {
+      margin: 0 0 8px 0;
+      color: var(--essu-green);
+      font-size: 18px;
+    }
+
+    .item-info p {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 15px;
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+
+    .item-meta {
+      font-size: 11px;
+      color: #888;
+      border-top: 1px solid #f0f0f0;
+      padding-top: 10px;
+      font-weight: 600;
+    }
+
+    .btn-view {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--essu-green);
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn-view:hover {
+      background: var(--essu-light-green);
+    }
+
+   
+    /* ===== MOBILE RESPONSIVENESS ===== */
+    @media (max-width: 992px) { 
+      .menu-toggle {
+        display: block;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px; /* Inayos ko to para hindi matakpan ang header */
+        Right: 0;
+        width: 50%;
+        background-color: var(--essu-green);
+        padding: 10px 0;
+        border-bottom: 4px solid var(--essu-gold);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+
+      nav ul.show {
+        display: flex;
+      }
+
+      nav ul li {
+        width: 100%;
+        text-align: center;
+      }
+
+      nav ul li a {
+        display: block;
+        padding: 10px;
+     }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .logo span { font-size: 22px; }
+      .container { padding: 15px; }
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--essu-gold);
+      font-size: 14px;
+    }
+    
+    
+    
+    /* Ilagay ito sa pinakababa ng <style> section */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 9999; /* Sobrang taas para siguradong laging nasa ibabaw */
+  left: 0; top: 0; width: 100%; height: 100%; 
+  background-color: rgba(0,0,0,0.8); 
+  align-items: center; justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  border-top: 8px solid var(--essu-gold);
+  color: #333;
+}
+
+.close-modal {
+  position: absolute;
+  right: 20px; top: 15px;
+  font-size: 24px; cursor: pointer; color: #888;
+}
+
+
+/* Admin Buttons Style */
+.admin-controls {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+  border-top: 1px dashed #ddd;
+  padding-top: 10px;
+}
+
+.btn-approve {
+  flex: 1;
+  background: var(--essu-light-green);
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-delete-admin {
+  flex: 1;
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pending-badge {
+  background: #f0ad4e;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+  </style>
+</head>
+<body>
+
+<div id="claimModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeClaimModal()">&times;</span>
+    <h2 style="font-family: 'Cinzel', serif; color: var(--essu-green); text-align: center; font-size: 18px;">Claim Request Form</h2>
+    <p id="targetItemName" style="text-align: center; font-weight: bold; color: var(--essu-light-green); margin-bottom: 20px;"></p>
+    
+    <form id="claimForm">
+      <input type="hidden" id="claimItemIndex">
+      
+      <label style="font-size: 12px; font-weight: 600;">Full Name:</label>
+      <input type="text" id="fullName" class="search-input" style="width: 100%; margin-bottom: 12px; box-sizing: border-box;" required>
+      
+      <label style="font-size: 12px; font-weight: 600;">Role:</label>
+      <select id="courseYear" class="filter-select" style="width: 100%; margin-bottom: 12px; box-sizing: border-box;" required>
+        <option value="" disabled selected>Select Role</option>
+        <option value="Student">Student</option>
+        <option value="Staff">Staff</option>
+        <option value="Teacher">Teacher</option>
+        <option value="Other">Other</option>
+      </select>
+      
+      <label style="font-size: 12px; font-weight: 600;">Address:</label>
+      <input type="text" id="address" class="search-input" style="width: 100%; margin-bottom: 12px; box-sizing: border-box;" required>
+      
+      <label style="font-size: 12px; font-weight: 600;">Contact Number:</label>
+      <input type="tel" id="contactNum" class="search-input" style="width: 100%; margin-bottom: 20px; box-sizing: border-box;" required>
+      
+      <button type="submit" class="btn-view" style="border: none; cursor: pointer;">Submit Claim Request</button>
+    </form>
+  </div>
+</div>
+
+ <header>
+     
+     
+     
+    <div class="nav-container">
+        <div class="logo">
+            <img src="logologo.png" alt="ESSU Logo" style="height: 40px; width: auto;">
+     <span>ESSU LOST & FOUND</span>
+      </div>
+      
+   <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <ul id="navMenu">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Browse.html"class="active">Browse</a></li>
+          <li><a href="PostReport.html">Reporting Items</a></li>
+          <li><a href="Contact.html">Contact</a></li>    
+          <li><a href="dashboard.html">Dashboard</a></li>
+<li><a href="#" onclick="logout()">Logout</a></li>        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+      
+    <h1>BROWSE ITEMS</h1>
+    <p class="subtitle">Find items that were lost or found on campus.</p>
+
+    <div class="search-filter-wrapper">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search for items (e.g. Wallet, ID...)">
+      <select class="filter-select" id="statusFilter">
+        <option value="all">All Items</option>
+        <option value="lost">Lost</option>
+        <option value="found">Found</option>
+      </select>
+    </div>
+
+    <div class="items-grid" id="itemsGrid">
+      
+      <div class="item-card lost-item">
+        <div class="item-image">
+          <span class="status-tag status-lost">Lost</span>
+          <img src="iphone.jpg" alt="Iphone" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="item-info">
+          <h3>Iphone</h3>
+          <p>Cellphone found in the CBMA premises. Claim it at the faculty office.</p>
+          <div class="item-meta">Date: August 22, 2025</div>
+          <a href="#" class="btn-view">Claim request </a>
+        </div>
+      </div>
+      
+      
+      
+      
+ 
+      <div class="item-card found-item">
+        <div class="item-image">
+          <span class="status-tag status-found">Found</span>
+          <img src="JUAN ID.png" alt="Id" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="item-info">
+          <h3>ID</h3>
+          <p>Found near the Guard House. ID no. 2023-01633. Name: Juan Dela Cruz.</p>
+          <div class="item-meta">Date: September 29, 2026</div>
+          <a href="#" class="btn-view">Claim request </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+
+  <footer>© 2026 ESSU Lost & Found System</footer>
+<script>
+// ==========================================
+// 1. AUTH GUARD - PROTECT THIS PAGE
+// ==========================================
+// Kinukuha muna ang data bago gamitin sa isAdmin
+const currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+(function() {
+    if (!currentUser) {
+        alert("Access Denied! Mangyaring mag-login muna.");
+        window.location.replace("login.html"); 
+    }
+})();
+
+// Global variable para malaman kung Admin ang naka-login
+const isAdmin = currentUser && currentUser.email === "essufound@gmail.com";
+
+function logout() {
+    localStorage.removeItem('loggedInUser');
+    window.location.replace("login.html");
+}
+
+// ==========================================
+// 2. MENU TOGGLE (MOBILE VIEW)
+// ==========================================
+function toggleMenu() {
+    const navMenu = document.getElementById("navMenu");
+    navMenu.classList.toggle("show");
+}
+
+// ==========================================
+// 3. LOGIC PARA SA ITEMS & CLAIMS
+// ==========================================
+
+
+
+function isItemClaimed(item) {
+    return item.claims && item.claims.some(c => c.status === 'approved');
+}
+
+function loadItems() {
+    const grid = document.getElementById('itemsGrid');
+    if(!grid) return; // Iwas error kung wala ang grid sa page
+    
+    const items = JSON.parse(localStorage.getItem('reportedItems')) || [];
+    grid.innerHTML = "";
+
+    items.forEach((item, index) => {
+        if (!isAdmin && item.approvalStatus !== 'approved') return;
+
+        const card = document.createElement('div');
+        card.className = `item-card ${item.status}-item`;
+
+
+
+        const itemImgSrc = item.image ? item.image : 'placeholder-image.png';
+        const isPending = item.approvalStatus === 'pending';
+        const isClaimed = isItemClaimed(item);
+
+        let userAction = '';
+        if (!isAdmin) {
+            if (isClaimed) {
+                userAction = `<p style="text-align:center; font-weight:bold; color:green; margin-top:10px;">✔ ALREADY CLAIMED</p>`;
+            } else {
+                userAction = `<button class="btn-view" onclick="openClaimModal(${index}, '${item.name}')">Claim Request</button>`;
+            }
+        }
+
+  
+  
+        // Hanapin ang part na ito sa loob ng loadItems() function:
+let claimsHtml = '';
+if (isAdmin && item.claims && item.claims.length > 0) {
+    claimsHtml = `
+        <div style="margin-top: 15px; padding: 10px; background: #fdfae6; border-radius: 8px; border: 1px solid var(--essu-gold);">
+            <p style="font-weight: bold; font-size: 13px; color: var(--essu-green); margin-bottom: 8px; border-bottom: 1px solid #ddd;">CLAIM HISTORY:</p>
+            <div style="max-height: 250px; overflow-y: auto;">
+                ${item.claims.map((claim, cIndex) => `
+                    <div style="font-size: 11px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #ccc;">
+                        <b>Name:</b> ${claim.fullName}<br>
+                        <b>Role:</b> ${claim.courseYear}<br>
+                        <b>Address:</b> ${claim.address}<br>
+                        <b>Contact:</b> ${claim.contact}<br>
+                        <b>Status:</b> <span style="color:${claim.status === 'approved' ? 'green' : claim.status === 'rejected' ? 'red' : '#f0ad4e'}; font-weight: bold;">${claim.status.toUpperCase()}</span>
+                        
+                        ${claim.status === 'pending' ? `
+                            <div style="display:flex; gap:5px; margin-top:8px;">
+                                <button class="btn-approve" style="padding:4px; cursor:pointer;" onclick="approveClaim(${index}, ${cIndex})">Approve</button>
+                                <button class="btn-delete-admin" style="padding:4px; cursor:pointer;" onclick="rejectClaim(${index}, ${cIndex})">Reject</button>
+                            </div>` : ''}
+                    </div>`).join('')}
+            </div>
+        </div>`;
+}
+
+        
+        else if (isAdmin) {
+            claimsHtml = `<p style="font-size: 11px; color: #888; text-align: center; margin-top: 10px;">No claim history yet.</p>`;
+        }
+
+        let adminButtons = isAdmin ? `
+            <div class="admin-controls">
+                ${isPending ? `<button class="btn-approve" onclick="approveItem(${index})">APPROVE REPORT</button>` : ''}
+                <button class="btn-delete-admin" onclick="deleteItem(${index})">DELETE POST</button>
+            </div>` : '';
+
+        card.innerHTML = `
+            <div class="item-image" style="position: relative; height: 600px;">
+                <span class="status-tag status-${item.status}">${item.status}</span>
+                ${isPending ? '<span class="pending-badge">PENDING</span>' : ''}
+                <img src="${itemImgSrc}" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div class="item-info">
+                <h3>${item.name}</h3>
+                <p>${item.desc}</p>
+                <div class="item-meta">Location: ${item.loc || 'N/A'} | Date: ${item.date}</div>
+                ${!isAdmin ? userAction : `<p style="text-align:center; font-weight:bold; color:var(--essu-green); font-size:12px; margin-top:10px;">ADMIN CONTROL PANEL</p>`}
+                ${adminButtons}
+                ${claimsHtml}
+            </div>`;
+        grid.appendChild(card);
+    });
+}
+
+// ==========================================
+// 4. MODAL & FORM HANDLERS
+// ==========================================
+function openClaimModal(index, itemName) {
+    document.getElementById('claimModal').style.display = 'flex';
+    document.getElementById('targetItemName').innerText = "Claiming: " + itemName;
+    document.getElementById('claimItemIndex').value = index;
+}
+
+function closeClaimModal() {
+    document.getElementById('claimModal').style.display = 'none';
+    document.getElementById('claimForm').reset();
+}
+
+const claimForm = document.getElementById('claimForm');
+if(claimForm) {
+    claimForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const index = document.getElementById('claimItemIndex').value;
+        let items = JSON.parse(localStorage.getItem('reportedItems')) || [];
+        
+        const claimData = {
+            fullName: document.getElementById('fullName').value,
+            courseYear: document.getElementById('courseYear').value,
+            address: document.getElementById('address').value,
+            contact: document.getElementById('contactNum').value,
+            dateSubmitted: new Date().toLocaleString(),
+            status: "pending"
+        };
+
+        if (!items[index].claims) items[index].claims = [];
+        items[index].claims.push(claimData);
+        
+        localStorage.setItem('reportedItems', JSON.stringify(items));
+        alert("Claim request submitted!");
+        closeClaimModal();
+        loadItems();
+    });
+}
+
+// ==========================================
+// 5. ADMIN ACTIONS
+// ==========================================
+function approveClaim(itemIndex, claimIndex) {
+    let items = JSON.parse(localStorage.getItem('reportedItems'));
+    items[itemIndex].claims[claimIndex].status = 'approved';
+    localStorage.setItem('reportedItems', JSON.stringify(items));
+    alert("Claim Approved!");
+    loadItems();
+}
+
+function rejectClaim(itemIndex, claimIndex) {
+    let items = JSON.parse(localStorage.getItem('reportedItems'));
+    items[itemIndex].claims[claimIndex].status = 'rejected';
+    localStorage.setItem('reportedItems', JSON.stringify(items));
+    alert("Claim Rejected!");
+    loadItems();
+}
+
+function approveItem(index) {
+    let items = JSON.parse(localStorage.getItem('reportedItems'));
+    items[index].approvalStatus = 'approved';
+    localStorage.setItem('reportedItems', JSON.stringify(items));
+    alert("Post Approved!");
+    loadItems();
+}
+
+function deleteItem(index) {
+    if (confirm("Sigurado ka bang gusto mong burahin ang post na ito?")) {
+        let items = JSON.parse(localStorage.getItem('reportedItems'));
+        items.splice(index, 1);
+        localStorage.setItem('reportedItems', JSON.stringify(items));
+        loadItems();
+    }
+}
+
+// ==========================================
+// 6. SEARCH & FILTER
+// ==========================================
+function filterItems() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const selectedStatus = document.getElementById('statusFilter').value;
+    const cards = document.getElementsByClassName('item-card');
+
+    for (let card of cards) {
+        const title = card.querySelector('h3').innerText.toLowerCase();
+        const matchesSearch = title.includes(searchTerm);
+        const isLost = card.classList.contains('lost-item');
+        const isFound = card.classList.contains('found-item');
+        let matchesStatus = selectedStatus === 'all' || 
+                           (selectedStatus === 'lost' && isLost) || 
+                           (selectedStatus === 'found' && isFound);
+        
+        card.style.display = (matchesSearch && matchesStatus) ? 'flex' : 'none';
+    }
+}
+
+const searchInput = document.getElementById('searchInput');
+const statusFilter = document.getElementById('statusFilter');
+
+if(searchInput) searchInput.addEventListener('input', filterItems);
+if(statusFilter) statusFilter.addEventListener('change', filterItems);
+
+// Initial Load
+window.onload = loadItems;
+</script>
+
+
+
+</body>
+</html>
