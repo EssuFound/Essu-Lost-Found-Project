@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESSU Lost & Found System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --essu-green: #006400;
+      --essu-light-green: #228B22;
+      --essu-gold: #FFD700;
+      --text-dark: #333;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, var(--essu-light-green), var(--essu-green));
+      margin: 0;
+      padding: 0;
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ===== NAVBAR ===== */
+    header {
+      background-color: var(--essu-green);
+      border-bottom: 4px solid var(--essu-gold);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Logo sa kaliwa, Nav sa kanan */
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--essu-gold);
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 50px;
+      width: auto;
+      background: transparent;
+    }
+
+    /* Desktop Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex; /* Horizontal sa Desktop */
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: var(--essu-light-green);
+      color: var(--essu-gold);
+    }
+
+    .menu-toggle {
+      display: none; /* Tago sa Desktop */
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* ===== CONTENT ===== */
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: var(--white);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-top: 8px solid var(--essu-gold);
+    }
+
+   
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      color: var(--essu-green);
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+    .image-box {
+      width: 100%;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .image-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    section {
+      margin-bottom: 30px;
+      line-height: 1.8;
+    }
+
+    h2 {
+      font-family: 'Cinzel', serif;
+      color: var(--essu-green);
+      border-bottom: 2px solid var(--essu-gold);
+      display: inline-block;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+
+    p {
+      text-align: justify;
+      font-size: 15px;
+      color: #444;
+    }
+
+    /* ===== MOBILE RESPONSIVENESS ===== */
+    @media (max-width: 992px) { /* Trigger mobile menu earlier for better spacing */
+      .menu-toggle {
+        display: block;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        Right: 0;
+        width: 50%;
+        background-color: var(--essu-green);
+        padding: 10px 0;
+        border-bottom: 4px solid var(--essu-gold);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+
+      nav ul.show {
+        display: flex;
+      }
+      nav ul li {
+        width: 100%;
+        text-align: center;
+      }
+
+      nav ul li a {
+        display: block;
+        padding: 10px;
+     }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .logo span { font-size: 22px; }
+      .container { padding: 15px; }
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--essu-gold);
+      font-size: 14px;
+    }
+    
+  </style>
+</head>
+<body>
+
+    <header>
+    <div class="nav-container">
+        <div class="logo">
+            <img src="logologo.png" alt="ESSU Logo" style="height: 40px; width: auto;">
+     <span>ESSU LOST & FOUND</span>
+      </div>
+      
+      
+      <nav>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <ul id="navMenu">
+          <li><a href="Home.html" class="active">Home</a></li>
+          <li><a href="Browse.html">Browse</a></li>
+          <li><a href="PostReport.html">Reporting Items</a></li>
+          <li><a href="Contact.html">Contact </a></li>    
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="login.html">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1>Lost & Found Management System</h1>
+    <div class="subtitle">A digital solution for recovering lost belongings within ESSU Campuses</div>
+
+    <div class="image-box">
+      <img src="1a.png" alt="ESSU Campus System">
+    </div>
+
+<section>
+  <h2>System Overview</h2>
+
+  <p>
+    <strong>The “Lost and Found – ESSU Main” platform is a centralized digital system designed to efficiently manage lost and found items within the campus.</strong>
+    Its primary purpose is to provide a reliable and organized space where users can report missing belongings or submit items they have found. By digitizing the traditional lost-and-found process, the system minimizes confusion, reduces time spent searching, and increases the likelihood of successful item recovery.
+  </p>
+
+  <p>
+    The platform is built with a user-centered approach, ensuring that all features are accessible, clear, and easy to navigate. It allows users to browse listings, filter items based on categories, and view detailed descriptions that help in identifying belongings. Each entry includes essential information such as the item name, description, date, and location where it was lost or found. This structured format ensures consistency and improves the accuracy of matching lost items with their rightful owners.
+  </p>
+
+  <p>
+    Security and reliability are also key components of the system. The platform encourages responsible use by requiring accurate and honest information from users. While it promotes openness, it also ensures that sensitive details are handled carefully to protect the privacy of individuals. This balance helps maintain trust among users while ensuring that the system remains effective and dependable.
+  </p>
+
+  <p>
+    In addition, the platform supports continuous updates, allowing users to modify or remove their posts once items are claimed or returned. This keeps the system clean, relevant, and up-to-date. Over time, it also builds a record of successful recoveries, demonstrating the effectiveness of the platform and encouraging more users to participate.
+  </p>
+</section>
+<section>
+  <h2>How to Use the Platform</h2>
+
+  <p>
+    The “Lost and Found – ESSU Main” platform is designed to be simple, accessible, and easy to use for all members of the campus community. Whether you are a student, faculty member, or staff, the system provides a convenient way to report and search for lost items without hassle. Its user-friendly interface ensures that even first-time users can navigate the platform with ease.
+  </p>
+
+  <p>
+    For those who have lost an item, you can begin by visiting the <strong>Report Lost</strong> section. Here, you will be asked to provide important details about your missing belonging, such as the item name, description, date it was lost, and the last known location. Providing accurate and detailed information increases the chances of successfully finding your item, as it helps others easily identify and match it with found listings.
+  </p>
+
+  <p>
+    If you have found an item, you can contribute to the community by going to the <strong>Report Found</strong> section. Simply enter the necessary information, including where and when the item was discovered, along with a clear description. It is important to avoid including overly specific details that only the rightful owner should know, as this helps ensure proper verification during the claiming process.
+  </p>
+
+  <p>
+    In addition to reporting items, users can explore the platform by visiting the <strong>Browse Items</strong> page. This section displays all active lost and found listings, allowing users to search and filter items based on keywords, categories, or dates. Regularly checking this page can significantly improve your chances of finding a match, especially if your item was recently reported by another user.
+  </p>
+
+  <p>
+    Once a match has been identified, users can follow the provided instructions to coordinate the return of the item. After the item has been successfully claimed, it is encouraged to update or remove the post to keep the system accurate and organized. By following these simple steps and actively participating, everyone helps maintain a reliable and efficient lost-and-found system for the entire ESSU Main community.
+  </p>
+
+</section>
+  </div>
+
+  <footer>© 2026 ESSU Lost & Found System </footer>
+
+    <script>
+    // 1. AUTHENTICATION GUARD
+    (function() {
+      const user = localStorage.getItem('loggedInUser');
+      if (!user) {
+        // Kung walang naka-login, ibabalik sa login page
+        window.location.replace('login.html');
+      }
+    })();
+
+    // 2. MENU TOGGLE FUNCTIONS
+    function toggleMenu() {
+      const menu = document.getElementById("navMenu");
+      menu.classList.toggle("show");
+    }
+
+    // Close menu when clicking outside (Para sa mobile)
+    window.onclick = function(event) {
+      if (!event.target.matches('.menu-toggle')) {
+        const menu = document.getElementById("navMenu");
+        if (menu && menu.classList.contains('show')) {
+          menu.classList.remove('show');
+        }
+      }
+    }
+  </script>
+
+
+</body>
+</html>
